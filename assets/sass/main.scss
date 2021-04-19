@@ -1,0 +1,71 @@
+@charset "utf-8";
+
+$body-family: sans-serif;
+$body-background-color: #fff;
+$body-size: 16px;
+
+$primary: #b72cbb;
+
+@import "bulma/sass/utilities/_all.sass";
+@import "bulma/sass/base/_all.sass";
+@import "bulma/sass/helpers/typography.sass";
+@import "bulma/sass/elements/title.sass";
+@import "bulma/sass/elements/button.sass";
+
+/* Header */
+
+@import "bulma/sass/components/navbar.sass";
+
+/* Home */
+
+@import "bulma/sass/layout/hero.sass";
+@import "bulma/sass/elements/container.sass";
+@import "bulma/sass/grid/columns.sass";
+@import "bulma/sass/elements/image.sass";
+@import "bulma/sass/components/card.sass";
+
+.home-cards .card {
+  margin: 1em;
+}
+
+.home-cards .card-image .title {
+  width: 100%;
+
+  background: rgba(#fff, 0.5);
+  padding: 0.5em 0.25em;
+
+  position: absolute;
+  bottom: 0em;
+  left: 0em;
+}
+
+/* Footer */
+
+.site-footer {
+  font-size: 0.5em;
+  opacity: 0.7;
+  padding: 1em;
+  text-align: center;
+}
+
+.site-footer a {
+  color: $body-color;
+  text-decoration: underline;
+}
+
+/* Privacy alert */
+
+@import "bulma/sass/elements/other.sass";
+@import "bulma/sass/components/message.sass";
+@import "bulma/sass/helpers/other.sass";
+
+.privacy-alert {
+  width: 100%;
+
+  margin-bottom: 0em !important;
+
+  position: fixed;
+  left: 0%;
+  bottom: 0%;
+}
+

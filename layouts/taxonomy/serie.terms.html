@@ -1,0 +1,12 @@
+{{ define "article/content/after" }}
+  <section class="page-list">
+    {{ $pages := partial "get-pages.tmpl" . }}
+
+    <ul>
+      {{ range $pages }}
+        <li>{{ partial "page/card.tmpl" . }}</li>
+      {{ end }}
+    </ul>
+  </section>
+{{ end }}
+

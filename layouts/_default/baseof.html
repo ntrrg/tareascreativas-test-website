@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="{{ .Site.Language | default "en" }}">
+<head>
+{{ block "head" . }}
+  {{ if ne hugo.Environment "development" }}
+    {{ with .Site.Params.googleTagManager }}
+      <script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
+      new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
+      j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
+      'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
+      })(window,document,'script','dataLayer','{{ . }}');</script>
+    {{ end }}
+  {{ end }}
+
+  <meta charset="utf-8"/>
+  <meta name="viewport"
+        content="width=device-width, initial-scale=1.0, viewport-fit=cover"/>
+
+  {{ range .Translations }}
+    <link rel="alternate" hreflang="{{ .Language.Lang }}"
+          href="{{ .Permalink | safeURL }}"/>
+  {{ end }}
+
+  {{ range .AlternativeOutputFormats }}
+    <link rel="{{ .Rel }}" type="{{ .MediaType.Type }}"
+          href="{{ .Permalink | safeURL }}"/>
+  {{ end }}
+
+  {{ block "head-metadata" . }}
+    {{ partial "head/metadata.tmpl" . }}
+    {{ partial "head/app.tmpl" . }}
+    {{ hugo.Generator }}
+  {{ end }}
+
+  {{ with .Site.Params.interledger }}
+    <meta name="monetization" content="{{ . }}">
+  {{ end }}
+
+  {{ block "head-tags" . }}{{ end }}
+
+  <title>
+    {{ block "head-title" . }}
+      {{ if not .IsHome }}
+        {{ .Title }} {{ .Site.Params.titleSeparator }}
+      {{ end }}
+
+      {{ .Site.Params.name }}
+    {{ end }}
+  </title>
+
+  {{ block "styles-default" . }}
+    {{ .Scratch.Set "cssSrc" "sass/main.scss" }}
+    {{ .Scratch.Set "cssOutput" "css/main.css" }}
+    {{ $sheet := partial "build-css.tmpl" . }}
+    <link rel="stylesheet" type="text/css" href="{{ $sheet.Permalink }}"/>
+  {{ end }}
+
+  {{ block "styles" . }}{{ end }}
+
+  {{ block "page-info-js" . }}
+    <script>
+      window.hpage = { params: {{ .Params }} }
+    </script>
+
+    {{ $i18nFile := printf "i18n/%s.toml" .Site.Language }}
+
+    {{ if fileExists $i18nFile }}
+      {{ $i18n := $i18nFile | readFile | unmarshal }}
+
+      <script>
+        window.hi18nData = {{ $i18n }}
+        window.hi18n = (key) => window.hi18nData[key].other
+      </script>
+    {{ end }}
+  {{ end }}
+
+  {{ block "scripts-head" . }}{{ end }}
+{{ end }}
+</head>
+
+{{ $bodyClass := printf "kind-%s type-%s" .Kind .Type }}
+
+{{ if isset .Params "layout" }}
+  {{ $bodyClass = printf "%s layout-%s" $bodyClass .Params.layout }}
+{{ end }}
+
+{{ if ne .Pages nil }}
+  {{ $bodyClass = printf "%s has-pages" $bodyClass }}
+{{ end }}
+
+{{ if eq .Params.aside true }}
+  {{ $bodyClass = printf "%s has-aside" $bodyClass }}
+{{ end }}
+
+{{ if eq .Params.toc true }}
+  {{ $bodyClass = printf "%s has-toc" $bodyClass }}
+{{ end }}
+
+{{ if eq .Params.comments true }}
+  {{ $bodyClass = printf "%s has-comments" $bodyClass }}
+{{ end }}
+
+{{ if eq .Params.paginate true }}
+  {{ $bodyClass = printf "%s has-pagination" $bodyClass }}
+{{ end }}
+
+{{ if eq .Type "custom" }}
+  {{ $suffix := replace (index (split .File ".") 0) "/" "-" }}
+  {{ $bodyClass = printf "%s custom-%s" $bodyClass $suffix }}
+{{ end }}
+
+<body class="{{ $bodyClass }} has-navbar-fixed-top">
+{{ if ne hugo.Environment "development" }}
+  {{ with .Site.Params.googleTagManager }}
+    <noscript>
+      <iframe src="https://www.googletagmanager.com/ns.html?id={{ . }}"
+    height="0" width="0" style="display:none;visibility:hidden"></iframe>
+    </noscript>
+  {{ end }}
+{{ end }}
+
+{{ block "body" . }}
+  <header class="site-header">
+  {{ block "header" . }}
+    {{ partial "page/header.tmpl" . }}
+  {{ end }}
+  </header>
+
+  <main>
+    {{ block "main" . }}{{ end }}
+  </main>
+
+  <footer class="site-footer">
+  {{ block "footer" . }}
+    {{ partial "page/footer.tmpl" . }}
+  {{ end }}
+  </footer>
+
+  {{ partial "privacy.tmpl" . }}
+
+  {{ block "scripts-default" . }}
+    {{ .Scratch.Set "jsSrc" "js/main.js" }}
+    {{ $script := partial "build-js.tmpl" . }}
+    <script defer src="{{ $script.Permalink }}"></script>
+  {{ end }}
+
+  {{ block "scripts" . }}{{ end }}
+{{ end }}
+</body>
+</html>
+

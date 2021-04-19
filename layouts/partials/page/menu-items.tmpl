@@ -1,0 +1,23 @@
+{{ $menu := index .Site.Params (.Scratch.Get "menuItems") }}
+
+{{ range $i, $x := $menu.items }}
+  {{- if findRE "^https?://" .url 1 -}}
+    <a class="navbar-item" href="{{ .url }}" target="_blank"
+       rel="noopener noreferrer">{{ .text }}</a>
+  {{- else -}}
+    {{- $page := $.Site.GetPage (strings.TrimRight "/" .url) -}}
+    {{- $active := "" -}}
+
+    {{- if and (eq .url "/") $.IsHome -}}
+      {{- $active = "is-active" -}}
+    {{- else if and (ne .url "/") (hasPrefix $.Permalink $page.Permalink) -}}
+      {{- $active = "is-active" -}}
+    {{- end -}}
+
+    <a href="{{ $page.Permalink }}" class="navbar-item {{ $active }}">
+      {{ .text | default $page.Title }}</a>
+  {{- end -}}
+{{ end }}
+
+{{ .Scratch.Delete "menuItems" }}
+

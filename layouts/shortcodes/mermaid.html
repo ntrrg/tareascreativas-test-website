@@ -1,0 +1,64 @@
+{{ $caption := .Get "caption" | default (.Get 0) }}
+{{ $code := .Get "code" }}
+{{ $font := .Get "font" }}
+{{ $theme := .Get "theme" }}
+{{ $class := .Get "class" }}
+
+<figure class="mermaid-chart {{ with $class }}{{ . }}{{ end }}">
+  <div class="mermaid-output"></div>
+
+  {{ with $caption }}
+    <figcaption>{{ $.Page.RenderString . }}</figcaption>
+  {{ end }}
+
+  <div class="mermaid-code"
+       {{ if ne $code true }}style="display: none"{{ end }}>
+    {{ $.Page.RenderString .Inner }}
+  </div>
+</figure>
+
+{{ if ne ($.Page.Scratch.Get "sc-mermaid") true }}
+  {{ .Scratch.Set "jsScripts" (slice "vendor/mermaid-v8.8.0.js") }}
+  {{ partial "import-js.tmpl" . }}
+
+  <script>
+    window.addEventListener('load', () => {
+      if (typeof mermaid === 'undefined') {
+        return
+      }
+
+      if (typeof window.mermaidOpts === 'undefined') {
+        window.mermaidOpts = {
+          startOnLoad: false,
+          {{ with $font }}fontFamily: '{{ $font }}',{{ end }}
+          {{ with $theme }}theme: '{{ $theme }}',{{ end }}
+          flowchart: {
+            useMaxWidth: true
+          },
+          sequence: {
+            useMaxWidth: true
+          },
+          gantt: {
+            useMaxWidth: true
+          }
+        }
+      }
+
+      mermaid.mermaidAPI.initialize(window.mermaidOpts)
+
+      const charts = document.querySelectorAll('.mermaid-chart')
+
+      for (const chart of charts) {
+        const id = 'mermaid-' + Math.floor(Math.random() * 1000)
+        const src = chart.querySelector('code').innerText
+
+        mermaid.mermaidAPI.render(id, src, (data) => {
+          chart.querySelector('.mermaid-output').innerHTML = data
+        })
+      }
+    })
+  </script>
+
+  {{ $.Page.Scratch.Set "sc-mermaid" true }}
+{{ end }}
+

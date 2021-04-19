@@ -1,0 +1,27 @@
+<nav role="navigation" aria-label="primary-menu" class="navbar is-fixed-top"
+     x-data="{ open: false }">
+  <div class="container">
+    <div class="navbar-brand">
+      <a class="navbar-item" href="{{ relLangURL "/" }}">
+        <img src="/uploads/isologo.png" width="103" height="30">
+      </a>
+
+      <span class="navbar-burger" data-target="mainMenu" role="button"
+            aria-label="menu" aria-expanded="false"
+            :class="{'is-active': open}" @click="open = !open">
+        <span aria-hidden="true"></span>
+        <span aria-hidden="true"></span>
+        <span aria-hidden="true"></span>
+      </span>
+    </div>
+
+    <div id="mainMenu" class="navbar-menu" :class="{'is-active': open}"
+         @click.away="open = false" @keydown.escape.window="open = false">
+      <div class="navbar-end">
+        {{ .Scratch.Set "menuItems" "menu" }}
+        {{ partial "page/menu-items.tmpl" . }}
+      </div>
+    </div>
+  </div>
+</nav>
+

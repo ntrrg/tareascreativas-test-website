@@ -1,0 +1,47 @@
+{{ if isset .Params "date" }}
+  <div>
+    <strong>{{ i18n "METADATA_DATE_PUBLISHED" }}:</strong>
+    {{ $publishDate := .PublishDate.Format "2006/01/02 15:04:05 -07:00" }}
+    <time datetime="{{ $publishDate }}">{{ $publishDate }}</time>
+  </div>
+
+  {{ if ne .Params.date .Params.publishdate }}
+    <div>
+      <strong>{{ i18n "METADATA_DATE_MODIFIED" }}:</strong>
+      {{ $date := .Date.Format "2006/01/02 15:04:05 -07:00" }}
+      <time datetime="{{ $date }}">{{ $date }}</time>
+    </div>
+  {{ end }}
+{{ end }}
+
+{{ if ne .Params.hidemetadata true }}
+  {{ range $key, $value := .Params.metadata }}
+    <div>
+      <strong>
+        {{ replace $key "-" "_" | upper | printf "METADATA_%s" | i18n }}:
+      </strong>
+
+      <span>{{ $.RenderString $value }}</span>
+    </div>
+  {{ end }}
+{{ end }}
+
+{{ range $name, $_ := .Site.Taxonomies }}
+  {{ if isset $.Params $name }}
+    {{ $tax := $.Site.GetPage $name }}
+
+    <div>
+      <strong>{{ $tax.Title | default $name }}:</strong>
+
+      {{ range $i, $x := $.GetTerms $name -}}
+        {{- if gt $i 0 }}{{ $tax.Params.separator | default " " }}{{ end -}}
+        <a href="{{ .Permalink }}">
+          {{- $tax.Params.prefix -}}
+          {{- .Title -}}
+          {{- $tax.Params.suffix -}}
+        </a>
+      {{- end }}
+    </div>
+  {{ end }}
+{{ end }}
+

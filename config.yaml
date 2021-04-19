@@ -1,0 +1,94 @@
+baseURL: https://tareascreativas-test-website.netlify.app/
+title: Tareas Creativas
+params:
+  name: Tareas Creativas
+  title: Tareas Creativas
+  titleSeparator: "-"
+  copyright: Tareas Creativas 2021
+  author:
+    type: Organization
+    name: Tareas Creativas
+    email: info@tareascreativas.com
+    website: https://tareascreativas.com/
+  image: /favicon-512x512.png
+  ampImage: /icon-206x60.png
+  #googleTagManager: GTM-XXXXXXX
+  #disqus: tareascreativas-website
+  interledger: "$ilp.uphold.com/YM4XLxrdPh44"
+defaultContentLanguage: es
+defaultContentLanguageInSubdir: true
+languages:
+  es:
+    languageName: Español
+    params:
+      description: Si estás buscando información acerca de Tareas Creativas, este es el lugar indicado.
+      menu:
+        items:
+          - url: "/"
+            text: "Inicio"
+          - url: "/conócenos/"
+          - url: "/niños-líderes/"
+          - url: "/actividades-creativas/"
+          - url: "/recursos-educativos/"
+          - url: "/tips-para-padres/"
+          - url: "/contáctanos/"
+    permalinks:
+      blog: /blog/:slug/
+      projects: /proyectos/:slug/
+      tags: /etiquetas/:slug/
+  en:
+    languageName: English
+taxonomies:
+  tag: tags
+related:
+  includeNewer: true
+  indices:
+  - name: keywords
+    weight: 100
+  - name: tags
+    weight: 50
+  threshold: 100
+  toLower: false
+theme: []
+Paginate: 10
+enableEmoji: true
+markup:
+  highlight:
+    codeFences: true
+    hl_Lines: ""
+    lineNoStart: 1
+    lineNos: false
+    lineNumbersInTable: true
+    noClasses: false
+    tabWidth: 2
+  tableOfContents:
+    startLevel: 1
+    endLevel: 6
+  goldmark:
+    attribute:
+      block: true
+      title: true
+    renderer:
+      unsafe: true
+enableRobotsTXT: true
+ignoreErrors: 
+  - error-remote-getjson
+enableGitInfo: true
+minify: true
+server:
+  headers:
+    - for: /**
+      values:
+        Cache-Control: no-cache, no-store
+        X-Content-Type-Options: nosniff
+        Referrer-Policy: strict-origin-when-cross-origin
+    - for: /**/
+      values:
+        X-XSS-Protection: 1; mode=block
+    - for: /*.html
+      values:
+        X-XSS-Protection: 1; mode=block
+    - for: /*.webmanifest
+      values:
+        Content-Type: application/manifest+json; charset=utf-8
+

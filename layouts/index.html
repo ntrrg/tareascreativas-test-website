@@ -1,0 +1,33 @@
+{{ define "main" }}
+  <section class="hero is-fullheight">
+    <div class="hero-body">
+      <div class="container">
+        <h1 class="title has-text-centered">{{ .Site.Title }}</h1>
+
+        <div class="columns home-cards">
+          {{ range .Params.cards }}
+            {{ $page := $.Site.GetPage . }}
+
+            <div class="column">
+              <a href="{{ $page.Permalink }}">
+                <div class="card">
+                  <div class="card-image">
+                    <figure class="image is-4by3">
+                      <img src="{{ $page.Params.image }}"
+                           alt="{{ $page.Title }}">
+
+                      <p class="title is-5 has-text-centered">
+                        {{ $page.Title }}
+                      </p>
+                    </figure>
+                  </div>
+                </div>
+              </a>
+            </div>
+          {{ end }}
+        </div>
+      </div>
+    </div>
+  </section>
+{{ end }}
+

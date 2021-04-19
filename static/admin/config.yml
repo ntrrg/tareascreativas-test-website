@@ -1,0 +1,39 @@
+site_url: https://tareascreativas-test-links.netlify.app/
+logo_url: /uploads/logo.png
+locale: es
+publish_mode: editorial_workflow
+media_folder: static/uploads
+public_folder: /uploads
+slug:
+  encoding: ascii
+  clean_accents: true
+  sanitize_replacement: _
+collections:
+  - name: pages-es
+    label: Páginas
+    files:
+      - name: links-es
+        label: Página principal
+        file: content/_index.es.md
+        fields:
+          - name: links
+            label: Enlaces
+            identifier_field: text
+            widget: list
+            fields:
+              - {name: text, label: Texto, widget: string}
+              - {name: url, label: URL, widget: string}
+              - {name: icon, label: Ícono, widget: file, allow_multiple: false}
+              - {name: color, label: Color de fondo, widget: color}
+              - {name: external, label: Abrir en otra pestaña, widget: boolean}
+          - name: social
+            label: Redes Sociales
+            identifier_field: label
+            widget: list
+            fields:
+              - {name: label, label: Texto, widget: string}
+              - {name: url, label: URL, widget: string}
+              - {name: icon, label: Ícono, widget: file, allow_multiple: false}
+backend:
+  name: git-gateway
+  branch: main

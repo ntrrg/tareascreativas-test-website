@@ -1,0 +1,64 @@
+<section class="article-toc">
+  {{ if ne .Params.toc false }}
+    {{ partial "page/toc.tmpl" . }}
+  {{ end }}
+</section>
+
+<section class="article-related-content">
+  {{ $related := .Site.RegularPages.Related . | first .Site.Params.relatedcount }}
+
+  {{ with $related }}
+    <details>
+      <summary class="article-related-content-title">
+        <strong>{{ i18n "PAGE_RELATED" }}</strong>
+      </summary>
+
+      <ul class="article-related-content-items">
+        {{ range $related }}
+          <li>
+            <a href="{{ .Permalink }}" title="{{ .Description }}">
+              {{ .Title }}
+            </a>
+          </li>
+        {{ end }}
+      </ul>
+    </details>
+  {{ end }}
+</section>
+
+<section class="article-sharing">
+  {{ partial "page/share.tmpl" . }}
+</section>
+
+<section class="article-series">
+  {{ $series := .GetTerms "series" }}
+
+  {{ range sort $series "Title" }}
+    <table class="article-series-serie">
+    <thead>
+      <tr><th>
+        <a href="{{ .Permalink | default "#" }}">{{ .Title }}</a>
+      </th></tr>
+    </thead>
+
+    <tbody>
+      {{ $pages := partial "get-pages.tmpl" . }}
+
+      {{ range $i, $_ := $pages }}
+        {{ $active := "" }}
+
+        {{ if eq $.Permalink .Permalink }}
+          {{ $active = "is-active" }}
+        {{ end }}
+
+        <tr><td class="{{ $active }}">
+          <a href="{{ .Permalink }}">
+            {{ add $i 1 }}. {{ .Title }}
+          </a>
+        </td></td>
+      {{ end }}
+    </tbody>
+    </table>
+  {{ end }}
+</section>
+
